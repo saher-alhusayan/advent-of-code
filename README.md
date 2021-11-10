@@ -1,2 +1,2 @@
 # advent-of-code
-Repo containing my answer to advent of code puzzles https://adventofcode.com
+Repo containing my answers to advent of code puzzles https://adventofcode.com
