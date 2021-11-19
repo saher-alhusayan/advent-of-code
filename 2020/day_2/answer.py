@@ -7,7 +7,7 @@ def make_data_dictionaries(lines: List[str]) -> List[Dict[str, Any]]:
     dictionaries: List[Dict[str, Any]] = []
     for line in lines:
         min_occurance = int(line.split("-")[0])
-        max_occurance = int(line.split("-")[1][0])
+        max_occurance = int(line.split(" ")[0].split("-")[1])
         letter = line.split(" ")[1][0]
         password = line.split(" ")[2]
         dictionaries.append(
@@ -40,5 +40,4 @@ part_1_answer = len(
         if does_password_conform_to_policy(dictionary)
     ]
 )
-
 print(part_1_answer)
