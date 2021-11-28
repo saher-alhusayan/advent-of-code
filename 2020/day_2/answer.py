@@ -41,3 +41,28 @@ part_1_answer = len(
     ]
 )
 print(part_1_answer)
+
+
+def check_letter_in_two_positions(policy_and_password: Dict[str, Any]) -> bool:
+    position_one = policy_and_password.get("min_occurance")
+    position_two = policy_and_password.get("max_occurance")
+    letter = policy_and_password.get("letter")
+    password = policy_and_password.get("password")
+    index_one = position_one - 1
+    index_two = position_two - 1
+    if (password[index_one] == letter and password[index_two] != letter) or (
+        password[index_one] != letter and password[index_two] == letter
+    ):
+        return True
+    else:
+        return False
+
+
+part_2_answer = len(
+    [
+        dictionary
+        for dictionary in policies_and_passwords
+        if check_letter_in_two_positions(dictionary)
+    ]
+)
+print(part_2_answer)
