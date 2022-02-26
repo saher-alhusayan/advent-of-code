@@ -27,10 +27,10 @@ print(f"answer to part 1: " f"{differences.get(1) * differences.get(3)}")
 
 # PART 2 #
 
-volatabes = sorted([int(volatage) for volatage in data.split("\n")])
-d = {volatabes.pop(): 1}
+volatages = sorted([int(volatage) for volatage in data.split("\n")])
+d = {volatages.pop(): 1}
 
-for n in list(reversed(volatabes)) + [0]:
+for n in list(reversed(volatages)) + [0]:
     d[n] = d.get(n + 1, 0) + d.get(n + 2, 0) + d.get(n + 3, 0)
 
 print(f"answer to part 2: {d[0]}")
