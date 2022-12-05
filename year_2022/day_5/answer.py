@@ -20,7 +20,7 @@ instructions = [re.findall(r"\d+", item) for item in instructs]
 
 def action_moves(
     crates: Dict[int, List[str]], instructions: List[List[str]], part: int
-) -> Dict[int, List[str]]:
+) -> None:
     for instruction in instructions:
         number_of_crates_to_move, crate_from, crate_to = instruction
         stack_from = crates.get(int(crate_from))
