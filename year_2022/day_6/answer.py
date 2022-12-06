@@ -1,14 +1,14 @@
 from input_data import buffers
 
 
-def get_answer(buffers: str, lenght: int) -> int:
+def get_answer(buffers: str, length: int) -> int:
 
-    for index, _ in enumerate(buffers[3:], lenght):
-        if len(buffers[index - lenght : index]) == len(
-            set(buffers[index - lenght : index])
+    for index, _ in enumerate(buffers[3:], length):
+        if len(buffers[index - length : index]) == len(
+            set(buffers[index - length : index])
         ):
             return index
 
 
-print(get_answer(buffers=buffers, lenght=4))
-print(get_answer(buffers=buffers, lenght=14))
+print(get_answer(buffers=buffers, length=4))
+print(get_answer(buffers=buffers, length=14))
