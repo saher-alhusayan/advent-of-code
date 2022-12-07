@@ -15,7 +15,16 @@ def get_sub_dirs(string: str) -> List[str]:
     return ls
 
 
-def action_commands(instructions: List[str]) -> Dict[str, Any]:
+def get_total_disk_space(instructions):
+    total = 0
+    for line in instructions:
+        for item in line.split("\n"):
+            if bool(re.search(r"\d", item)):
+                total += int(item.split(" ")[0])
+    return total
+
+
+def action_commands(instructions: List[str], part: int) -> Dict[str, Any]:
     filesystem = {"root/": {}}
     path = "root/"
     for _, line in enumerate(instructions):
@@ -26,14 +35,14 @@ def action_commands(instructions: List[str]) -> Dict[str, Any]:
                     filesystem[new_dir_path] = {}
                 if bool(re.search(r"\d", item)):
                     filesystem[path].update(
-                        {item.split(" ")[1]: int(item.split(" ")[0])}
+                        {path + item.split(" ")[1]: int(item.split(" ")[0])}
                     )
-                    if path != "root/":
+                    if path != "root/" and part == 1:
                         paths = get_sub_dirs(path)
                         for new_path in paths:
                             try:
                                 filesystem[new_path].update(
-                                    {item.split(" ")[1]: int(item.split(" ")[0])}
+                                    {path + item.split(" ")[1]: int(item.split(" ")[0])}
                                 )
                             except KeyError:
                                 pass
@@ -46,10 +55,22 @@ def action_commands(instructions: List[str]) -> Dict[str, Any]:
     return filesystem
 
 
+part_1_answer = action_commands(data, 1)
+
 sums_of_dirs = [
-    sum(item.values())
-    for item in action_commands(data).values()
-    if sum(item.values()) < 100000
+    sum(item.values()) for item in part_1_answer.values() if sum(item.values()) < 100000
 ]
 
 print(sum(sums_of_dirs))
+
+
+# PART 2
+
+
+target = 30000000 - (70000000 - get_total_disk_space(data))
+
+valid_directories_to_remove = [
+    sum(item.values()) for item in part_1_answer.values() if sum(item.values()) > target
+]
+
+print(min(valid_directories_to_remove))
