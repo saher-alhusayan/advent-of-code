@@ -15,7 +15,7 @@ def get_sub_dirs(string: str) -> List[str]:
     return ls
 
 
-def get_total_disk_space(instructions):
+def get_total_disk_space(instructions: List[str]) -> int:
     total = 0
     for line in instructions:
         for item in line.split("\n"):
@@ -24,7 +24,7 @@ def get_total_disk_space(instructions):
     return total
 
 
-def action_commands(instructions: List[str], part: int) -> Dict[str, Any]:
+def action_commands(instructions: List[str]) -> Dict[str, Any]:
     filesystem = {"root/": {}}
     path = "root/"
     for _, line in enumerate(instructions):
@@ -37,7 +37,7 @@ def action_commands(instructions: List[str], part: int) -> Dict[str, Any]:
                     filesystem[path].update(
                         {path + item.split(" ")[1]: int(item.split(" ")[0])}
                     )
-                    if path != "root/" and part == 1:
+                    if path != "root/":
                         paths = get_sub_dirs(path)
                         for new_path in paths:
                             try:
@@ -55,7 +55,7 @@ def action_commands(instructions: List[str], part: int) -> Dict[str, Any]:
     return filesystem
 
 
-part_1_answer = action_commands(data, 1)
+part_1_answer = action_commands(data)
 
 sums_of_dirs = [
     sum(item.values()) for item in part_1_answer.values() if sum(item.values()) < 100000
