@@ -1,5 +1,7 @@
 from typing import List, Union
 from dataclasses import dataclass
+import math
+from copy import deepcopy
 
 
 @dataclass
@@ -12,7 +14,7 @@ class Monkey:
     throw_if_false: int
     number_of_items_inspected: int = 0
 
-    def inspect_items_and_throw(self, worry_level_divisor):
+    def inspect_items_and_throw(self, lcm=None):
         items_to_move = []
         for item in self.items:
             self.number_of_items_inspected += 1
@@ -24,14 +26,25 @@ class Monkey:
                     operation = item + self.operand
                 elif self.operation_type == "m":
                     operation = item * self.operand
-            if (operation // worry_level_divisor) % self.divisor == 0:
-                items_to_move.append(
-                    [self.throw_if_true, operation // worry_level_divisor]
-                )
+            if lcm:
+                operation %= lcm
+                if operation % self.divisor == 0:
+                    items_to_move.append(
+                        [self.throw_if_true, operation]
+                    )
+                else:
+                    items_to_move.append(
+                        [self.throw_if_false, operation ]
+                    )
             else:
-                items_to_move.append(
-                    [self.throw_if_false, operation // worry_level_divisor]
-                )
+                if (operation // 3) % self.divisor == 0:
+                    items_to_move.append(
+                        [self.throw_if_true, operation // 3]
+                    )
+                else:
+                    items_to_move.append(
+                        [self.throw_if_false, operation // 3]
+                    )
         self.items = []
         return items_to_move
 
@@ -57,15 +70,24 @@ monkeys = [
 ]
 
 
-def play_round(monkeys: List[Monkey], rounds: int, worry_level_divisor) -> None:
+def play_rounds(monkeys: List[Monkey], rounds: int,lcm: math.lcm=None) -> None:
     for _ in range(rounds):
         for monkey in monkeys:
-            items_to_move = monkey.inspect_items_and_throw(worry_level_divisor)
-            # print(monkey.number_of_items_inspected)
+            items_to_move = monkey.inspect_items_and_throw(lcm=lcm)
             for id, item in items_to_move:
                 monkeys[id].items.append(item)
 
 
-play_round(monkeys, 20, 3)
+# PART 1
+
+copy_monkeys = deepcopy(monkeys)
+play_rounds(copy_monkeys, 20)
+# gets a sorted list of all inspected items by every monkey
+print(sorted([item.number_of_items_inspected for item in copy_monkeys]))
+
+# PART 2
+
+lcm = math.lcm(*[monkey.divisor for monkey in monkeys])
+play_rounds(monkeys, 10000, lcm=lcm)
 # gets a sorted list of all inspected items by every monkey
 print(sorted([item.number_of_items_inspected for item in monkeys]))
