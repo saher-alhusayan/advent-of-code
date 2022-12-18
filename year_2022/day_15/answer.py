@@ -54,3 +54,38 @@ all_blocked_points = map(
 )
 unpack = [item for x in all_blocked_points for item in x]
 print(len(set([item for x in unpack for item in x if item != TARGET])))
+
+
+# PART 2
+
+
+def get_sensor_edges(
+    sensors_beacons: List[List[Tuple[int, int]]]
+) -> Tuple[List[int], List[int]]:
+    negative = []
+    positive = []
+    for sensor_beacon in sensors_beacons:
+        sensor, beacon = sensor_beacon
+        m_dist = calculate_manhatan_distance(sensor, beacon)
+        positive.append(sensor[0] - sensor[1] - m_dist)
+        positive.append(sensor[0] - sensor[1] + m_dist)
+        negative.append(sensor[0] + sensor[1] - m_dist)
+        negative.append(sensor[0] + sensor[1] + m_dist)
+    return positive, negative
+
+
+def find_distress_beacon(lines: List[int]) -> int:
+    for _, item in enumerate(lines):
+        for _, item2 in enumerate(lines, 1):
+            if abs(item - item2) == 2:
+                return min(item, item2) + 1
+
+
+positive, negative = get_sensor_edges(ls)
+pos = find_distress_beacon(positive)
+neg = find_distress_beacon(negative)
+
+distress_beacon_x = (pos + neg) // 2
+distress_beacon_y = (neg - pos) // 2
+answer = (4000000 * distress_beacon_x) + distress_beacon_y
+print(answer)
